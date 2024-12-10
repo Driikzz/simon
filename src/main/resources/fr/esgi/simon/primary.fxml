@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Button?>
-<?import javafx.geometry.Insets?>
+<StackPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="fr.esgi.simon.controller.PrimaryController" alignment="CENTER">
+   <!-- Cercle des boutons -->
+   <Pane prefWidth="400" prefHeight="400" style="-fx-background-color: black; -fx-border-radius: 200; -fx-border-width: 2;">
+      <!-- Bouton Rouge -->
+      <Button fx:id="padRed" style="-fx-background-color: red; -fx-shape: 'M200 0 A200 200 0 0 1 400 200 L200 200 Z';"
+              layoutX="0" layoutY="0" prefWidth="200" prefHeight="200" onAction="#handlePadClick" />
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.esgi.simon.controller.PrimaryController">
-   <children>
-      <Label text="Primary View" />
-      <Button fx:id="primaryButton" text="Switch to Secondary View" onAction="#switchToSecondary"/>
-   </children>
-   <padding>
-      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-   </padding>
-</VBox>
+      <!-- Bouton Vert -->
+      <Button fx:id="padGreen" style="-fx-background-color: green; -fx-shape: 'M400 200 A200 200 0 0 1 200 400 L200 200 Z';"
+              layoutX="200" layoutY="0" prefWidth="200" prefHeight="200" onAction="#handlePadClick" />
+
+      <!-- Bouton Bleu -->
+      <Button fx:id="padBlue" style="-fx-background-color: blue; -fx-shape: 'M200 400 A200 200 0 0 1 0 200 L200 200 Z';"
+              layoutX="200" layoutY="200" prefWidth="200" prefHeight="200" onAction="#handlePadClick" />
+
+      <!-- Bouton Jaune -->
+      <Button fx:id="padYellow" style="-fx-background-color: yellow; -fx-shape: 'M0 200 A200 200 0 0 1 200 0 L200 200 Z';"
+              layoutX="0" layoutY="200" prefWidth="200" prefHeight="200" onAction="#handlePadClick" />
+   </Pane>
+
+   <!-- Bouton Démarrer -->
+   <Button text="Démarrer" onAction="#handleStartGame" StackPane.alignment="BOTTOM_CENTER"
+           style="-fx-background-color: black; -fx-text-fill: white;" />
+</StackPane>
