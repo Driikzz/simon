@@ -24,7 +24,7 @@ public class SequenceServiceImpl implements SequenceService {
 
     @Override
     public List<Pad> obtenirSequenceActuelle() {
-        return new ArrayList<>(sequence); // Retourne une copie pour éviter les modifications externes
+        return new ArrayList<>(sequence);
     }
 
     @Override

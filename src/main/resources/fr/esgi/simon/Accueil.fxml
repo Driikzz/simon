@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="20" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="fr.esgi.simon.controller.AccueilController">
+    <Label text="Bienvenue dans le jeu Simon" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+    <Label text="Choisissez un mode de jeu :" style="-fx-font-size: 18px;" />
+
+    <Button text="Mode Solo" style="-fx-font-size: 16px;" onAction="#handleModeSolo" />
+    <Button text="Mode Multi-joueurs" style="-fx-font-size: 16px;" onAction="#handleModeMultiJoueurs" />
+</VBox>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="20" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="fr.esgi.simon.controller.SaisiePrenomsController">
+    <Label text="Liste des joueurs" style="-fx-font-size: 18px;" />
+    <VBox fx:id="joueursContainer" spacing="10" />
+    <Button text="Démarrer la partie" onAction="#handleDemarrer" style="-fx-font-size: 16px;" />
+</VBox>

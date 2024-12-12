@@ -3,27 +3,39 @@
 <?import javafx.scene.layout.*?>
 
 <StackPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="fr.esgi.simon.controller.PrimaryController" alignment="CENTER">
-   <!-- Cercle des boutons -->
-   <Pane prefWidth="400" prefHeight="400" style="-fx-background-color: black; -fx-border-radius: 200; -fx-border-width: 2;">
-      <!-- Bouton Rouge -->
-      <Button fx:id="padRed" style="-fx-background-color: red; -fx-shape: 'M200 0 A200 200 0 0 1 400 200 L200 200 Z';"
-              layoutX="0" layoutY="0" prefWidth="200" prefHeight="200" onAction="#handlePadClick" />
+           fx:controller="fr.esgi.simon.controller.JeuSimonController" alignment="CENTER">
 
-      <!-- Bouton Vert -->
-      <Button fx:id="padGreen" style="-fx-background-color: green; -fx-shape: 'M400 200 A200 200 0 0 1 200 400 L200 200 Z';"
-              layoutX="200" layoutY="0" prefWidth="200" prefHeight="200" onAction="#handlePadClick" />
+   <!-- Conteneur Principal -->
+   <VBox spacing="20" alignment="CENTER">
+      <!-- Informations sur le joueur -->
+      <VBox spacing="10" alignment="CENTER">
+         <Label fx:id="labelNomJoueur" text="Joueur Actuel" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+         <Label fx:id="labelScoreJoueur" text="Score : 0" style="-fx-font-size: 16px;" />
+      </VBox>
 
-      <!-- Bouton Bleu -->
-      <Button fx:id="padBlue" style="-fx-background-color: blue; -fx-shape: 'M200 400 A200 200 0 0 1 0 200 L200 200 Z';"
-              layoutX="200" layoutY="200" prefWidth="200" prefHeight="200" onAction="#handlePadClick" />
+      <!-- Grille des boutons -->
+      <GridPane alignment="CENTER" prefWidth="400" prefHeight="400">
+         <!-- Bouton Rouge -->
+         <Button fx:id="padRed" style="-fx-background-color: red;" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                 prefWidth="200" prefHeight="200" onAction="#handlePadClick" />
+         <!-- Bouton Vert -->
+         <Button fx:id="padGreen" style="-fx-background-color: green;" GridPane.rowIndex="0" GridPane.columnIndex="1"
+                 prefWidth="200" prefHeight="200" onAction="#handlePadClick" />
+         <!-- Bouton Bleu -->
+         <Button fx:id="padBlue" style="-fx-background-color: blue;" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                 prefWidth="200" prefHeight="200" onAction="#handlePadClick" />
+         <!-- Bouton Jaune -->
+         <Button fx:id="padYellow" style="-fx-background-color: yellow;" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                 prefWidth="200" prefHeight="200" onAction="#handlePadClick" />
+      </GridPane>
 
-      <!-- Bouton Jaune -->
-      <Button fx:id="padYellow" style="-fx-background-color: yellow; -fx-shape: 'M0 200 A200 200 0 0 1 200 0 L200 200 Z';"
-              layoutX="0" layoutY="200" prefWidth="200" prefHeight="200" onAction="#handlePadClick" />
-   </Pane>
+      <!-- Liste des Scores -->
+      <VBox spacing="10" alignment="CENTER">
+         <Label text="Scores des joueurs :" style="-fx-font-size: 16px;" />
+         <ListView fx:id="listScores" prefHeight="100" prefWidth="300" />
+      </VBox>
 
-   <!-- Bouton Démarrer -->
-   <Button text="Démarrer" onAction="#handleStartGame" StackPane.alignment="BOTTOM_CENTER"
-           style="-fx-background-color: black; -fx-text-fill: white;" />
+      <!-- Bouton Démarrer -->
+      <Button text="Démarrer" onAction="#handleStartGame" style="-fx-background-color: black; -fx-text-fill: white;" />
+   </VBox>
 </StackPane>
