@@ -9,7 +9,7 @@ import java.io.IOException;
 public class AccueilController {
 
     @FXML
-    private void handleModeSolo() {
+    public void handleModeSolo() {
         try {
             App.setRoot("Primary");
         } catch (IOException e) {
@@ -19,7 +19,7 @@ public class AccueilController {
     }
 
     @FXML
-    private void handleModeMultiJoueurs() {
+    public void handleModeMultiJoueurs() {
         try {
             App.setRoot("ChoixJoueurs");
         } catch (IOException e) {
