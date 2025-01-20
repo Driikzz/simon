@@ -34,8 +34,5 @@
          <Label text="Scores des joueurs :" style="-fx-font-size: 16px;" />
          <ListView fx:id="listScores" prefHeight="100" prefWidth="300" />
       </VBox>
-
-      <!-- Bouton Démarrer -->
-      <Button text="Démarrer" onAction="#handleStartGame" style="-fx-background-color: black; -fx-text-fill: white;" />
    </VBox>
 </StackPane>

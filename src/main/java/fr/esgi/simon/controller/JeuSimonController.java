@@ -1,5 +1,6 @@
 package fr.esgi.simon.controller;
 
+import fr.esgi.simon.App;
 import fr.esgi.simon.business.Pad;
 import fr.esgi.simon.service.PadService;
 import fr.esgi.simon.service.SequenceService;
@@ -7,6 +8,8 @@ import fr.esgi.simon.service.impl.PadServiceImpl;
 import fr.esgi.simon.service.impl.SequenceServiceImpl;
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -23,25 +26,21 @@ public class JeuSimonController {
     private final List<Pad> sequenceUtilisateur = new ArrayList<>();
     private boolean utilisateurPeutJouer = false;
 
-    private static List<String> joueurs = new ArrayList<>(); // Liste des joueurs
-    private final List<Integer> scores = new ArrayList<>(); // Scores des joueurs
-    private int indexJoueurActuel = 0; // Index du joueur en cours
-    private static boolean modeSolo = true; // Mode par défaut : solo
+    private static List<String> joueurs = new ArrayList<>();
+    private final List<Integer> scores = new ArrayList<>();
+    private int indexJoueurActuel = 0;
+    private static boolean modeSolo = true;
+    private int erreursConsecutives = 0;
 
     @FXML
     private Button padRed, padGreen, padBlue, padYellow;
 
     @FXML
-    private Label labelNomJoueur, labelScoreJoueur; // Affichage du joueur et de son score
+    private Label labelNomJoueur, labelScoreJoueur;
 
     @FXML
-    private ListView<String> listScores; // Affichage des scores de tous les joueurs
+    private ListView<String> listScores;
 
-    /**
-     * Définit le mode solo.
-     *
-     * @param solo true pour solo, false pour multi-joueurs
-     */
     public static void setModeSolo(boolean solo) {
         modeSolo = solo;
         if (solo) {
@@ -50,33 +49,31 @@ public class JeuSimonController {
         }
     }
 
-    /**
-     * Définit les joueurs pour le mode multi-joueurs.
-     *
-     * @param joueursListe Liste des noms des joueurs
-     */
     public static void setJoueurs(List<String> joueursListe) {
         modeSolo = false;
         joueurs = joueursListe;
     }
 
-    /**
-     * Initialise la partie.
-     */
     @FXML
     public void initialize() {
-        // Initialise les scores pour chaque joueur
+        if (joueurs == null || joueurs.isEmpty()) {
+            joueurs = new ArrayList<>();
+            joueurs.add("Joueur 1");
+            modeSolo = true;
+
+        }
+
+        scores.clear();
         for (int i = 0; i < joueurs.size(); i++) {
             scores.add(0);
         }
+
+        erreursConsecutives = 0;
         mettreAJourScores();
         afficherNomJoueur();
         handleStartGame();
     }
 
-    /**
-     * Démarre la partie.
-     */
     @FXML
     private void handleStartGame() {
         sequenceService.initialiserSequence();
@@ -85,11 +82,6 @@ public class JeuSimonController {
         jouerTour();
     }
 
-    /**
-     * Gestion du clic sur un bouton (Pad).
-     *
-     * @param event L'événement du clic
-     */
     @FXML
     private void handlePadClick(javafx.event.ActionEvent event) {
         if (!utilisateurPeutJouer) return;
@@ -114,9 +106,6 @@ public class JeuSimonController {
         }
     }
 
-    /**
-     * Lance le tour actuel.
-     */
     private void jouerTour() {
         utilisateurPeutJouer = false;
         sequenceUtilisateur.clear();
@@ -124,11 +113,6 @@ public class JeuSimonController {
         afficherSequence(sequenceService.obtenirSequenceActuelle());
     }
 
-    /**
-     * Affiche la séquence actuelle.
-     *
-     * @param sequence La séquence à afficher
-     */
     private void afficherSequence(List<Pad> sequence) {
         new Thread(() -> {
             try {
@@ -145,11 +129,6 @@ public class JeuSimonController {
         }).start();
     }
 
-    /**
-     * Met en évidence un bouton (Pad).
-     *
-     * @param pad Le Pad à mettre en évidence
-     */
     private void highlightButton(Pad pad) {
         if (pad.getCouleur().equalsIgnoreCase("Rouge")) {
             padRed.setStyle("-fx-background-color: lightcoral;");
@@ -162,9 +141,6 @@ public class JeuSimonController {
         }
     }
 
-    /**
-     * Réinitialise les styles des boutons.
-     */
     private void clearHighlights() {
         padRed.setStyle("-fx-background-color: red;");
         padGreen.setStyle("-fx-background-color: green;");
@@ -172,22 +148,34 @@ public class JeuSimonController {
         padYellow.setStyle("-fx-background-color: yellow;");
     }
 
-    /**
-     * Vérifie la séquence utilisateur.
-     */
     private void verifierSequence() {
         int tailleActuelle = sequenceUtilisateur.size();
         List<Pad> sequenceAttendue = sequenceService.obtenirSequenceActuelle();
 
         for (int i = 0; i < tailleActuelle; i++) {
             if (!sequenceUtilisateur.get(i).equals(sequenceAttendue.get(i))) {
-                afficherMessage("Incorrect ! " + (modeSolo ? "Fin du jeu." : "Passage au joueur suivant."), Alert.AlertType.ERROR);
+                afficherMessage("Incorrect !", Alert.AlertType.ERROR);
+
                 scores.set(indexJoueurActuel, scores.get(indexJoueurActuel) - 2);
                 mettreAJourScores();
-                if (!modeSolo) {
-                    passerAuJoueurSuivant();
+
+                // Si le joueur est éliminé
+                if (scores.get(indexJoueurActuel) < 0) {
+                    listScores.getItems().set(indexJoueurActuel, joueurs.get(indexJoueurActuel) + " (Éliminé)");
+                    joueurs.set(indexJoueurActuel, null); // Marque le joueur comme éliminé
+                }
+
+                // Vérifie s'il reste au moins 2 joueurs actifs
+                long joueursRestants = joueurs.stream().filter(joueur -> joueur != null).count();
+                if (joueursRestants < 2) {
+                    finDuJeu();
+                    return;
+                }
+
+                if (modeSolo) {
+                    jouerTour(); // Relance la séquence pour réessayer
                 } else {
-                    reinitialiserJeu();
+                    passerAuJoueurSuivant();
                 }
                 return;
             }
@@ -197,6 +185,7 @@ public class JeuSimonController {
             afficherMessage("Correct ! Niveau suivant.", Alert.AlertType.INFORMATION);
             scores.set(indexJoueurActuel, scores.get(indexJoueurActuel) + 2);
             mettreAJourScores();
+
             if (!modeSolo) {
                 passerAuJoueurSuivant();
             } else {
@@ -205,39 +194,41 @@ public class JeuSimonController {
         }
     }
 
-    /**
-     * Passe au joueur suivant.
-     */
+
+
     private void passerAuJoueurSuivant() {
-        indexJoueurActuel = (indexJoueurActuel + 1) % joueurs.size();
+        do {
+            indexJoueurActuel = (indexJoueurActuel + 1) % joueurs.size();
+        } while (joueurs.get(indexJoueurActuel) == null); // Ignore les joueurs éliminés
+
         afficherNomJoueur();
+        mettreAJourScores();
         jouerTour();
     }
 
-    /**
-     * Met à jour l'affichage des scores.
-     */
+
     private void mettreAJourScores() {
         listScores.getItems().clear();
         for (int i = 0; i < joueurs.size(); i++) {
-            listScores.getItems().add(joueurs.get(i) + ": " + scores.get(i) + " points");
+            if (joueurs.get(i) != null) {
+                listScores.getItems().add(joueurs.get(i) + ": " + scores.get(i) + " points");
+            } else {
+                listScores.getItems().add("Éliminé");
+            }
+        }
+
+        // Met à jour l'affichage du score pour le joueur actuel
+        if (joueurs.get(indexJoueurActuel) != null) {
+            labelScoreJoueur.setText("Score : " + scores.get(indexJoueurActuel));
         }
     }
 
-    /**
-     * Affiche le joueur en cours.
-     */
+
     private void afficherNomJoueur() {
         labelNomJoueur.setText("À toi, " + joueurs.get(indexJoueurActuel));
         labelScoreJoueur.setText("Score : " + scores.get(indexJoueurActuel));
     }
 
-    /**
-     * Affiche un message d'alerte.
-     *
-     * @param message Le message à afficher
-     * @param type    Le type de l'alerte
-     */
     private void afficherMessage(String message, Alert.AlertType type) {
         Alert alert = new Alert(type, message);
         alert.setTitle(type == Alert.AlertType.ERROR ? "Erreur" : "Information");
@@ -246,11 +237,6 @@ public class JeuSimonController {
         alert.showAndWait();
     }
 
-    /**
-     * Anime un bouton.
-     *
-     * @param button Le bouton à animer
-     */
     private void animerBouton(Button button) {
         ScaleTransition agrandir = new ScaleTransition(Duration.millis(200), button);
         agrandir.setToX(1.2);
@@ -264,12 +250,35 @@ public class JeuSimonController {
         agrandir.play();
     }
 
-    /**
-     * Réinitialise le jeu.
-     */
     private void reinitialiserJeu() {
         sequenceService.initialiserSequence();
         sequenceUtilisateur.clear();
         utilisateurPeutJouer = false;
     }
+
+    private void finDuJeu() {
+        try {
+            List<String> notesJouees = new ArrayList<>();
+            for (Pad pad : sequenceService.obtenirSequenceActuelle()) {
+                notesJouees.add(pad.getCouleur());
+            }
+
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("FinJeu.fxml"));
+            Parent root = loader.load();
+
+            FinJeuController controller = loader.getController();
+            if (modeSolo) {
+                controller.setScore(scores.get(indexJoueurActuel));
+            } else {
+                controller.setScores(joueurs, scores);
+            }
+            controller.setNotesJouees(notesJouees);
+
+            App.setRoot(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

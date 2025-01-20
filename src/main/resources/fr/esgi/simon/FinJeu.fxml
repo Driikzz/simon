@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      alignment="CENTER" spacing="20" fx:controller="fr.esgi.simon.controller.FinJeuController">
+
+    <Label text="Fin du Jeu" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    <ListView fx:id="listNotes" prefWidth="300" prefHeight="200"/>
+    <ListView fx:id="listScores" prefWidth="300" prefHeight="200"/>
+    <Label fx:id="labelScore" text="Score final : " style="-fx-font-size: 18px;"/>
+    <Button text="Jouer la Mélodie" onAction="#handlePlayMelody"/>
+    <Button text="Rejouer" onAction="#handleReplay"/>
+</VBox>
