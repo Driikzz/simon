@@ -15,6 +15,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.util.Duration;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,8 +86,6 @@ public class JeuSimonController {
 
     @FXML
     private void handlePadClick(javafx.event.ActionEvent event) {
-        if (!utilisateurPeutJouer) return;
-
         Button source = (Button) event.getSource();
         Pad padClique = null;
 
@@ -100,11 +100,35 @@ public class JeuSimonController {
         }
 
         if (padClique != null) {
+            // Lecture du son associé au pad
+            jouerSon(padClique.getSon().getPath());
+
             sequenceUtilisateur.add(padClique);
             animerBouton(source);
             verifierSequence();
         }
     }
+
+    private void jouerSon(String cheminSon) {
+        try {
+            // Vérifiez si le fichier est résolu
+            var resource = getClass().getResource(cheminSon);
+            if (resource == null) {
+                throw new IllegalArgumentException("Fichier audio introuvable : " + cheminSon);
+            }
+            System.out.println("Chargement du fichier audio depuis : " + resource.toString());
+            Media media = new Media(resource.toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la lecture du son : " + cheminSon + " - " + e.getMessage());
+            System.out.println("Chemin requis : " + cheminSon);
+            System.out.println("Chemin résolu : " + getClass().getResource(cheminSon));
+
+        }
+    }
+
+
 
     private void jouerTour() {
         utilisateurPeutJouer = false;
@@ -256,6 +280,7 @@ public class JeuSimonController {
         utilisateurPeutJouer = false;
     }
 
+
     private void finDuJeu() {
         try {
             List<String> notesJouees = new ArrayList<>();
@@ -279,6 +304,5 @@ public class JeuSimonController {
             e.printStackTrace();
         }
     }
-
 
 }

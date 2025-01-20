@@ -12,10 +12,10 @@ public class PadServiceImpl implements PadService {
 
     @Override
     public List<Pad> initialiserPads() {
-        pads.add(new Pad(1L, "Rouge", new Son("RougeSon", "../resources/sounds/Guitar/red_guitar_tone.wav")));
-        pads.add(new Pad(2L, "Vert", new Son("VertSon", "../resources/sounds/Guitar/green_guitar_tone.wav")));
-        pads.add(new Pad(3L, "Bleu", new Son("BleuSon", "../resources/sounds/Guitar/blue_guitar_tone.wav")));
-        pads.add(new Pad(4L, "Jaune", new Son("JauneSon", "../resources/sounds/Guitar/yellow_guitar_tone.wav")));
+        pads.add(new Pad(1L, "Rouge", new Son("RougeSon", "/sounds/Guitar/red_guitar_tone.wav")));
+        pads.add(new Pad(2L, "Vert", new Son("VertSon", "/sounds/Guitar/green_guitar_tone.wav")));
+        pads.add(new Pad(3L, "Bleu", new Son("BleuSon", "/sounds/Guitar/blue_guitar_tone.wav")));
+        pads.add(new Pad(4L, "Jaune", new Son("JauneSon", "/sounds/Guitar/yellow_guitar_tone.wav")));
         return pads;
     }
 
