@@ -1,0 +1,18 @@
+
+    @startuml
+    package "fr.esgi.simon.service" {
+        interface JoueurService
+        interface PadService
+        interface SequenceService
+        class JoueurServiceImpl
+        class PadServiceImpl
+        class SequenceServiceImpl
+
+        JoueurService <|-- JoueurServiceImpl
+        PadService <|-- PadServiceImpl
+        SequenceService <|-- SequenceServiceImpl
+
+        SequenceServiceImpl --> PadService : "utilise"
+    }
+    @enduml
+    
