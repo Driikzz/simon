@@ -11,7 +11,7 @@ public class AccueilController {
     @FXML
     public void handleModeSolo() {
         try {
-            App.setRoot("Primary");
+            App.setRoot("primary");
         } catch (IOException e) {
             e.printStackTrace();
             afficherErreur("Impossible de charger le mode solo.");

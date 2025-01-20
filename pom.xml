@@ -12,11 +12,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <!-- Permet d’utiliser la version 5 de JUnit par défaut -->
         <junit.jupiter.version>5.9.2</junit.jupiter.version>
-        <!-- Ajustez la version de mockito si besoin -->
         <mockito.version>4.11.0</mockito.version>
-        <!-- Ajustez la version de Jacoco si besoin -->
         <jacoco.version>0.8.10</jacoco.version>
     </properties>
 
@@ -60,7 +57,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Optionnel: pour utiliser des annotations de Mockito avec JUnit 5 -->
+        <!-- Mockito avec JUnit 5 -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
@@ -80,17 +77,26 @@
                 <version>3.8.0</version>
                 <configuration>
                     <release>11</release>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.34</version>
+                        </path>
+                    </annotationProcessorPaths>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
 
-            <!-- Plugin JavaFX Maven pour exécuter l’appli JavaFX -->
+            <!-- Plugin JavaFX Maven -->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.6</version>
                 <executions>
                     <execution>
-                        <!-- Configuration par défaut pour l'exécution : mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>fr.esgi.simon.App</mainClass>
@@ -99,27 +105,25 @@
                 </executions>
             </plugin>
 
-            <!-- Plugin Surefire pour exécuter les tests JUnit -->
+            <!-- Plugin Surefire pour les tests JUnit -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.1.2</version>
             </plugin>
 
-            <!-- Plugin Jacoco pour la couverture de code -->
+            <!-- Plugin Jacoco -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.version}</version>
                 <executions>
-                    <!-- Préparation de l'agent Jacoco -->
                     <execution>
                         <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
-                    <!-- Génération du rapport -->
                     <execution>
                         <id>report</id>
                         <phase>verify</phase>

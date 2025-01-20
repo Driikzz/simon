@@ -2,10 +2,8 @@ package fr.esgi.simon.business;
 
 
 import lombok.Data;
-import lombok.Getter;
 
 @Data
-@Getter
 public class Joueur {
     private Long id;
     private String pseudo;
