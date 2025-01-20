@@ -98,6 +98,14 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.5.0</version> <!-- Remplacez par la dernière version disponible -->
+            </plugin>
+
+
+
             <!-- Plugin JavaFX Maven -->
             <plugin>
                 <groupId>org.openjfx</groupId>
