@@ -1,0 +1,24 @@
+
+    @startuml
+    package "fr.esgi.simon.business" {
+        class Composition
+        class Instrument
+        class Joueur {
+            - Long id
+            - String pseudo
+        }
+        class Pad {
+            - Long id
+            - String couleur
+            - Son son
+        }
+        class Son {
+            - String nom
+            - String chemin
+        }
+        
+        Joueur --> Pad : "utilise"
+        Pad --> Son : "associe"
+    }
+    @enduml
+    

@@ -1,0 +1,13 @@
+
+    @startuml
+    package "fr.esgi.simon.controller" {
+        class AccueilController
+        class ChoixJoueursController
+        class JeuSimonController
+        class JoueurController
+        class PrimaryController
+        class SaisiePrenomsController
+        class SecondaryController
+    }
+    @enduml
+    
